@@ -1,34 +1,26 @@
-import React, { Fragment } from 'react';
-import ToDoItem from './ToDoItem';
+import React, { Fragment, useEffect } from "react";
+import { useStoreState, useStoreActions } from "easy-peasy";
+import TodoItem from "./TodoItem";
 
-const ToDos = () => {
-    const todos = [
-        {
-            id: 1,
-            title: 'Take out the trash',
-            completed: true
-        },
-        {
-            id: 2,
-            title: 'Pick up kids from school',
-            completed: false
-        },
-        {
-            id: 3,
-            title: 'Dinner with boss',
-            completed: false
-        }                
-    ];
-    return (
-        <Fragment>
-            <h1>Todos</h1>
-            <p>Click todo item to toggle completed</p>
-            <hr/>
-            {todos.map(todo =>  (
-                  <ToDoItem todo={todo} key={todo.id} />
-            ))}
-        </Fragment>
-    );
+const Todos = () => {
+  const todos = useStoreState(state => state.todos);
+  const fetchTodos = useStoreActions(actions => actions.fetchTodos);
+
+  useEffect(() => {
+    fetchTodos();
+    // eslint-disable-next-line
+  }, []);
+
+  return (
+    <Fragment>
+      <h1>Todos</h1>
+      <p>Click todo item to toggle completed</p>
+      <hr />
+      {todos.map(todo => (
+        <TodoItem todo={todo} key={todo.id} />
+      ))}
+    </Fragment>
+  );
 };
 
-export default ToDos;
+export default Todos;
